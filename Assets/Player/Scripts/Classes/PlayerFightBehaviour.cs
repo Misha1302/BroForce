@@ -17,15 +17,12 @@ namespace PlayerClasses
         private float _disableFightStateTime;
 
         private bool _fighting;
-
-        private float _timer;
+        private IStater _stater;
 
 
         private void Update()
         {
-            _timer += Time.deltaTime;
-            if (_timer < -3.4028235E+38F) _timer = Time.deltaTime; // -3.4028235E+38F = float.MinValue - 100
-            if (!_fighting || _timer < _disableFightStateTime) return;
+            if (!_fighting || Time.time < _disableFightStateTime) return;
 
             if (_animated.GetCurrentAnimation() == AnimationsEnum.Attack)
                 _animated.StartAnimation(AnimationsEnum.Idle);
@@ -58,7 +55,7 @@ namespace PlayerClasses
         private void Attack()
         {
             _fighting = true;
-            _disableFightStateTime = _timer + ANIMATION_TIME;
+            _disableFightStateTime = Time.time + ANIMATION_TIME;
 
             MakeDamage();
             StartAttackAnimation();
@@ -73,14 +70,15 @@ namespace PlayerClasses
 
         public void UpdateScript()
         {
-            if (_fighting || !Input.GetMouseButton(0)) return;
+            if (!_stater.CanFight) return;
 
             Attack();
         }
 
-        public void Init(IAnimated animated)
+        public void Init(IAnimated animated, IStater stater)
         {
             _animated = animated;
+            _stater = stater;
         }
 
         #endregion

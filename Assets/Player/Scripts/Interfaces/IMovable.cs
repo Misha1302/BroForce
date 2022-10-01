@@ -1,11 +1,10 @@
 namespace Interfaces
 {
-    public interface IMovable : IUpdatable
+    public interface IMovable
     {
-        public float HorizontalMovement
-        {
-            get;
-        }
-        public void Init(IAnimated animated, IJumpable jumpable, IFightable fightable);
+        public float HorizontalMovement { get; }
+
+        public void Init(IAnimated animated, Jumpable jumpable, IFightable fightable, IStater stater);
+        public void UpdateScript();
     }
 }

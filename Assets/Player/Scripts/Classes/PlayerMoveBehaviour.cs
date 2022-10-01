@@ -17,10 +17,11 @@ namespace PlayerClasses
         [SerializeField] private float maxHorizontalSpeed;
         [SerializeField] private Transform _playerToRotate;
 
+        private IStater _stater;
         private IAnimated _animated;
         private IFightable _fightable;
         private float _horizontalStopSpeed;
-        private IJumpable _jumpable;
+        private Jumpable _jumpable;
         private Rigidbody2D _playerRigidbody;
         private float _t;
 
@@ -82,9 +83,6 @@ namespace PlayerClasses
 
         private void Move()
         {
-            // 1 if axis > 0, 0 if axis == 0, -1 if axis < 0
-            HorizontalMovement = Math.Sign(Input.GetAxis(HORIZONTAL_AXIS));
-
             if (HorizontalMovement == 0 || _fightable.IsFighting())
             {
                 if (_horizontalStopSpeed == 0)
@@ -108,16 +106,25 @@ namespace PlayerClasses
 
         public void UpdateScript()
         {
-            if (!_jumpable.IsGrounded()) return;
+            UpdateHorizontalMovement();
+
+            if (!_stater.CanRun) return;
 
             Move();
         }
 
-        public void Init(IAnimated animated, IJumpable jumpable, IFightable fightable)
+        private void UpdateHorizontalMovement()
+        {
+            // 1 if axis > 0, 0 if axis == 0, -1 if axis < 0
+            HorizontalMovement = Math.Sign(Input.GetAxis(HORIZONTAL_AXIS));
+        }
+
+        public void Init(IAnimated animated, Jumpable jumpable, IFightable fightable, IStater stater)
         {
             _animated = animated;
             _jumpable = jumpable;
             _fightable = fightable;
+            _stater = stater;
 
             _playerRigidbody = GetComponent<Rigidbody2D>();
         }

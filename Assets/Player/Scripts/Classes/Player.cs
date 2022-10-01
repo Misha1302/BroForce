@@ -9,8 +9,9 @@ namespace PlayerClasses
         [SerializeField] private Animator animator;
         private IAnimated _animated;
         private IFightable _fightable;
-        private IJumpable _jumpable;
+        private Jumpable _jumpable;
         private IMovable _movable;
+        private IStater _stater;
 
         private void Start()
         {
@@ -38,10 +39,11 @@ namespace PlayerClasses
                 { AnimationsEnum.Hub, "Hub" }
             };
 
-            _movable.Init(_animated, _jumpable, _fightable);
             _animated.Init(animator, animationsNames);
-            _jumpable.Init(_animated, _movable);
-            _fightable.Init(_animated);
+            _stater.Init(_fightable, _jumpable);
+            _movable.Init(_animated, _jumpable, _fightable, _stater);
+            _jumpable.Init(_animated, _movable, _stater);
+            _fightable.Init(_animated, _stater);
         }
 
 
@@ -49,13 +51,15 @@ namespace PlayerClasses
         {
             _fightable = GetComponent<IFightable>();
             _movable = GetComponent<IMovable>();
-            _jumpable = GetComponent<IJumpable>();
+            _jumpable = GetComponent<Jumpable>();
             _animated = GetComponent<IAnimated>();
+            _stater = GetComponent<IStater>();
 
             _fightable ??= GetComponentInChildren<IFightable>();
             _movable ??= GetComponentInChildren<IMovable>();
-            _jumpable ??= GetComponentInChildren<IJumpable>();
+            _jumpable ??= GetComponentInChildren<Jumpable>();
             _animated ??= GetComponentInChildren<IAnimated>();
+            _stater ??= GetComponentInChildren<IStater>();
         }
     }
 }
