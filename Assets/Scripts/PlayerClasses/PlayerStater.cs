@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PlayerClasses
 {
-    public class Stater : MonoBehaviour, IStater
+    public class PlayerStater : MonoBehaviour, IStater
     {
         private IFightable _fightable;
         private Jumpable _jumpable;

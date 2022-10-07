@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Interfaces;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PlayerClasses
@@ -10,7 +10,7 @@ namespace PlayerClasses
         private IAnimated _animated;
         private IFightable _fightable;
         private Jumpable _jumpable;
-        private IMovable _movable;
+        private Movable _movable;
         private IStater _stater;
 
         private void Start()
@@ -41,7 +41,7 @@ namespace PlayerClasses
 
             _animated.Init(animator, animationsNames);
             _stater.Init(_fightable, _jumpable);
-            _movable.Init(_animated, _jumpable, _fightable, _stater);
+            _movable.Init(_animated, _fightable, _stater);
             _jumpable.Init(_animated, _movable, _stater);
             _fightable.Init(_animated, _stater);
         }
@@ -50,13 +50,13 @@ namespace PlayerClasses
         private void SetVariables()
         {
             _fightable = GetComponent<IFightable>();
-            _movable = GetComponent<IMovable>();
+            _movable = GetComponent<Movable>();
             _jumpable = GetComponent<Jumpable>();
             _animated = GetComponent<IAnimated>();
             _stater = GetComponent<IStater>();
 
             _fightable ??= GetComponentInChildren<IFightable>();
-            _movable ??= GetComponentInChildren<IMovable>();
+            _movable ??= GetComponentInChildren<Movable>();
             _jumpable ??= GetComponentInChildren<Jumpable>();
             _animated ??= GetComponentInChildren<IAnimated>();
             _stater ??= GetComponentInChildren<IStater>();

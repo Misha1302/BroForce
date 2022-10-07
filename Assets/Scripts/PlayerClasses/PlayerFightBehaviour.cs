@@ -1,5 +1,5 @@
-using System.Collections;
 using Interfaces;
+using System.Collections;
 using UnityEngine;
 
 namespace PlayerClasses
